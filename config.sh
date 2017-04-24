@@ -18,6 +18,7 @@ else fdisk -l
 read -p "input the disk you want to install the grub  " GRUB
 grub-install --target=i386-pc $GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
+fi
 ##安装显卡驱动
 VIDEO=4
 while (($VIDEO!=1&&$VIDEO!=2&&VIDEO!=3));do
