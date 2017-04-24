@@ -43,6 +43,7 @@ Server = http://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch" > /etc/pacman.d/
 nano /etc/pacman.conf
 ##安装基本系统
 pacstrap /mnt base base-devel
+rm /mnt/etc/fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 ##进入已安装的系统
 mv config.sh /mnt/root/config.sh
