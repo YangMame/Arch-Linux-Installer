@@ -45,6 +45,6 @@ nano /etc/pacman.conf
 pacstrap /mnt base base-devel
 genfstab -U /mnt >> /mnt/etc/fstab
 ##进入已安装的系统
-mv config.sh /mnt/root/install.sh
-chmod 777 /mnt/root/install.sh
-arch-chroot /mnt /bin/bash
+mv config.sh /mnt/root/config.sh
+chmod +x /mnt/root/config.sh
+arch-chroot /mnt /root/config.sh
