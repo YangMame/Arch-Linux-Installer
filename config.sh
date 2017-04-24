@@ -59,11 +59,11 @@ done
 ##安装必要软件/简单配置
 echo "[archlinuxcn]
 Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf
-pacman -Syu&&pacman -S iw wpa_supplicant dialog networkmanager xorg-server xterm firefox archlinuxcn-keyring yaourt
+pacman -Syu&&pacman -S archlinuxcn-keyring&&pacman -S iw wpa_supplicant dialog networkmanager xorg-server xterm firefox yaourt
 systemctl enable NetworkManager
 read -p "do you have bluetooth ? (y or enter " TMP
 if (("$TMP"=="y"))
-then pacman -S blue blueman&&systemctl enable bluetooth
+then pacman -S bluez blueman&&systemctl enable bluetooth
 fi
 ##安装桌面环境
 echo "which desktop you want to install"
