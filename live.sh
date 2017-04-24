@@ -10,10 +10,10 @@ fdisk -l
 read -p "input the / mount point:  " ROOT
 read -p "format it ? (y or enter  " TMP
 if (("$TMP"=="y"))
-then read -p "enter 1 to use ext4 defalut to use btrfs  " TMP
-if (("$TMP"=="1"))
-then mkfs.ext4 $ROOT
-else mkfs.btrfs $ROOT
+then read -p "input y to use ext4 defalut to use btrfs  " TMP
+if (("$TMP"=="y"))
+then mkfs.ext4 $ROOT -f
+else mkfs.btrfs $ROOT -f
 fi
 mount $ROOT /mnt
 fi
@@ -22,7 +22,7 @@ if (("$BOOT" == "y"))
 then read -p "input the /boot mount point:  " BOOT
 read -p "format it ? (y or enter  " TMP
 if (("$TMP"=="y"))
-then mkfs.fat -F32 $ROOT
+then mkfs.fat -F32 $ROOT -f
 fi
 mkdir /mnt/boot
 mount $BOOT /mnt/boot
@@ -32,7 +32,7 @@ if (("$SWAP" == "y"))
 then read -p "input the swap mount point:  " SWAP
 read -P "format it ? (y or enter  " TMP
 if (("$TMP"=="y"))
-then mkswap $SWAP
+then mkswap $SWAP -f
 fi
 swapon $SWAP
 fi
