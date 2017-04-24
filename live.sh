@@ -38,7 +38,7 @@ swapon $SWAP
 fi
 ##更改软件源
 echo "## China                                                                                               
-Server = http://mirrors.163.com/archlinux/\$repo/os/\$arch                                               
+#Server = http://mirrors.163.com/archlinux/\$repo/os/\$arch                                               
 Server = http://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 nano /etc/pacman.conf
 ##安装基本系统
