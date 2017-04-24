@@ -11,7 +11,7 @@ read -p "input the / mount point:  " ROOT
 read -p "format it ? (y or enter  " TMP
 if (("$TMP"=="y"))
 then read -p "enter 1 to use ext4 defalut to use btrfs  " TMP
-if (($TMP==1))
+if (("$TMP"=="1"))
 then mkfs.ext4 $ROOT
 else mkfs.btrfs $ROOT
 fi
