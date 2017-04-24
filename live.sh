@@ -27,7 +27,7 @@ fi
 mkdir /mnt/boot
 mount $BOOT /mnt/boot
 fi
-echo "do you have the swap partition ? (y or enter  " SWAP
+read -p "do you have the swap partition ? (y or enter  " SWAP
 if (("$SWAP" == "y"))
 then read -p "input the swap mount point:  " SWAP
 read -P "format it ? (y or enter  " TMP
@@ -42,10 +42,11 @@ echo "## China
 Server = http://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 nano /etc/pacman.conf
 ##安装基本系统
-pacstrap /mnt base base-devel
+pacstrap /mnt base base-devel --force
 rm /mnt/etc/fstab
-genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -U -p /mnt >> /mnt/etc/fstab
 ##进入已安装的系统
+wget https://raw.githubusercontent.com/yangxins/Arch/master/config.sh
 mv config.sh /mnt/root/config.sh
 chmod +x /mnt/root/config.sh
-arch-chroot /mnt /root/config.sh
+arch-chroot /mnt /bin/bash
