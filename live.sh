@@ -51,4 +51,4 @@ genfstab -U -p /mnt >> /mnt/etc/fstab
 wget https://raw.githubusercontent.com/yangxins/Arch/master/config.sh
 mv config.sh /mnt/root/config.sh
 chmod +x /mnt/root/config.sh
-arch-chroot /mnt /bin/bash
+arch-chroot /mnt /root/config.sh
