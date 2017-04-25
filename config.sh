@@ -40,7 +40,7 @@ else echo error ! input the number again
 fi
 done
 elif (($VIDEO == 3))
-then pacman -S bumbelbee -y
+then pacman -S bumblebee -y
 systemctl enable bumbelbeed
 TMP=4
 while (($TMP!=1&&$TMP!=2&&$TMP!=3));do
