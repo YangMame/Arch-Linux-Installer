@@ -12,27 +12,29 @@ read -p "format it ? (y or enter  " TMP
 if (("$TMP"=="y"))
 then read -p "input y to use ext4 defalut to use btrfs  " TMP
 if (("$TMP"=="y"))
-then mkfs.ext4 $ROOT -f
+then mkfs.ext4 $ROOT
 else mkfs.btrfs $ROOT -f
 fi
 mount $ROOT /mnt
 fi
 read -p "do you have the /boot mount point? (y or enter  " BOOT
 if (("$BOOT" == "y"))
-then read -p "input the /boot mount point:  " BOOT
+then fdisk -l
+read -p "input the /boot mount point:  " BOOT
 read -p "format it ? (y or enter  " TMP
 if (("$TMP"=="y"))
-then mkfs.fat -F32 $ROOT -f
+then mkfs.fat -F32 $ROOT
 fi
 mkdir /mnt/boot
 mount $BOOT /mnt/boot
 fi
 read -p "do you have the swap partition ? (y or enter  " SWAP
 if (("$SWAP" == "y"))
-then read -p "input the swap mount point:  " SWAP
+then fdisk -l
+read -p "input the swap mount point:  " SWAP
 read -P "format it ? (y or enter  " TMP
 if (("$TMP"=="y"))
-then mkswap $SWAP -f
+then mkswap $SWAP
 fi
 swapon $SWAP
 fi
