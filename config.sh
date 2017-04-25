@@ -10,12 +10,10 @@ echo $HOSTNAME  > /etc/hostname
 echo change your root passwd
 passwd
 ##安装引导
-if (fdisk -l | grep EFI > /dev/null 2>&1)
-then pacman -S grub efibootmger -y
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch
-grub-mkconfig -o /boot/grub/grub.cfg
-else pacman -S grub
-fdisk -l
+read -p "are you efi ? (y or enter  " TMP
+if (("$TMP"=="y"))
+then pacman -S grub efibootmger -y&&grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch&&grub-mkconfig -o /boot/grub/grub.cfg
+else pacman -S grub&&fdisk -l
 read -p "input the disk you want to install the grub  " GRUB
 grub-install --target=i386-pc $GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -41,7 +39,7 @@ fi
 done
 elif (($VIDEO == 3))
 then pacman -S bumblebee -y
-systemctl enable bumbelbeed
+systemctl enable bumblebeed
 TMP=4
 while (($TMP!=1&&$TMP!=2&&$TMP!=3));do
 read -p "version of nvidia-driver to install (input the number, 1--GeForce-8 and newer 2--GeForce-6/7 3--older   " TMP
@@ -75,21 +73,21 @@ DESKTOP=9
 while (($DESKTOP!=1&&$DESKTOP!=2&&$DESKTOP!=3&&$DESKTOP!=4&&$DESKTOP!=5&&$DESKTOP!=6&&$DESKTOP!=7&&$DESKTOP!=8));do
 read -p "gnome-1 kde-2 lxde-3 lxqt-4 mate-5 xfce-6 deepin-7 budgie-8   " DESKTOP
 case $DESKTOP in
-    1) pacman -S gnome -force&&systemctl enable gdm
+    1) pacman -S gnome --force&&systemctl enable gdm
     ;;
-    2) pacman -S plasma kde-applications kde-l10n-zh_cn sddm -force&&systemctl enable sddm
+    2) pacman -S plasma kde-applications kde-l10n-zh_cn sddm --force&&systemctl enable sddm
     ;;
-    3) pacman -S lxde lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
+    3) pacman -S lxde lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
     ;;
-    4) pacman -S lxqt lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
+    4) pacman -S lxqt lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
     ;;
-    5) pacman -S mate mate-extra lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
+    5) pacman -S mate mate-extra lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
     ;;
-    6) pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
+    6) pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
     ;;
     7) pacman -S deepin deepin-extra lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm&&echo greeter-session=lightdm-deepin-greeter >>/etc/lightdm/lightdm.conf
     ;;
-    8) pacman -S budgie-desktop lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
+    8) pacman -S budgie-desktop lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
     ;;
     *) echo error ! input the number again
     ;;
