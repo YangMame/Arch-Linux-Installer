@@ -21,9 +21,9 @@ grub-install --target=i386-pc $GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 fi
 ##安装显卡驱动
-VIDEO=4
-while (($VIDEO!=1&&$VIDEO!=2&&VIDEO!=3));do
-read -p "what is your video card ? (input the number: intel-1 nvidia-2 intel/nvidia-3  " VIDEO
+VIDEO=5
+while (($VIDEO!=1&&$VIDEO!=2&&VIDEO!=3&&VIDEO!=4));do
+read -p "what is your video card ? (input the number: intel-1 nvidia-2 intel/nvidia-3 ATI/AMD-4 " VIDEO
 if (($VIDEO == 1))
 then pacman -S xf86-video-intel -y
 elif (($VIDEO == 2))
@@ -54,6 +54,8 @@ then pacman -S nvidia-340xx -y
 else echo error ! input the number again
 fi
 done
+elif (($VIDEO==4))
+then pacman -S xf86-video-ati -y
 else
 echo error ! input the number again
 fi
@@ -61,7 +63,7 @@ done
 ##安装必要软件/简单配置
 echo "[archlinuxcn]
 Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf
-pacman -Syu&&pacman -S archlinuxcn-keyring&&pacman -S iw wpa_supplicant dialog networkmanager xorg-server xterm firefox yaourt wqy-zenhei wqy-microhei
+pacman -Syu&&pacman -S archlinuxcn-keyring&&pacman -S iw wpa_supplicant dialog networkmanager xorg-server xterm firefox yaourt wqy-zenhei wqy-microhei gnome-keyring
 systemctl enable NetworkManager
 read -p "do you have bluetooth ? (y or enter  " TMP
 if (("$TMP"=="y"))
@@ -73,21 +75,21 @@ DESKTOP=9
 while (($DESKTOP!=1&&$DESKTOP!=2&&$DESKTOP!=3&&$DESKTOP!=4&&$DESKTOP!=5&&$DESKTOP!=6&&$DESKTOP!=7&&$DESKTOP!=8));do
 read -p "gnome-1 kde-2 lxde-3 lxqt-4 mate-5 xfce-6 deepin-7 budgie-8   " DESKTOP
 case $DESKTOP in
-    1) pacman -S gnome -y&&systemctl enable gdm
+    1) pacman -S gnome -force&&systemctl enable gdm
     ;;
-    2) pacman -S plasma kde-applications kde-l10n-zh_cn sddm -y&&systemctl enable sddm
+    2) pacman -S plasma kde-applications kde-l10n-zh_cn sddm -force&&systemctl enable sddm
     ;;
-    3) pacman -S lxde lightdm lightdm-gtk-greeter -y &&systemctl enable lightdm
+    3) pacman -S lxde lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
     ;;
-    4) pacman -S lxqt lightdm lightdm-gtk-greeter -y &&systemctl enable lightdm
+    4) pacman -S lxqt lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
     ;;
-    5) pacman -S mate mate-extra lightdm lightdm-gtk-greeter -y&&systemctl enable lightdm
+    5) pacman -S mate mate-extra lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
     ;;
-    6) pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter -y&&systemctl enable lightdm
+    6) pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
     ;;
     7) pacman -S deepin deepin-extra lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm&&echo greeter-session=lightdm-deepin-greeter >>/etc/lightdm/lightdm.conf
     ;;
-    8) pacman -S budgie-desktop lightdm lightdm-gtk-greeter -y&&systemctl enable lightdm
+    8) pacman -S budgie-desktop lightdm lightdm-gtk-greeter -force&&systemctl enable lightdm
     ;;
     *) echo error ! input the number again
     ;;
