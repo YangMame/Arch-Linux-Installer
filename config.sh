@@ -14,7 +14,8 @@ if (fdisk -l | grep EFI > /dev/null 2>&1)
 then pacman -S grub efibootmger -y
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch
 grub-mkconfig -o /boot/grub/grub.cfg
-else fdisk -l
+else pacman -S grub
+fdisk -l
 read -p "input the disk you want to install the grub  " GRUB
 grub-install --target=i386-pc $GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -60,7 +61,7 @@ done
 ##安装必要软件/简单配置
 echo "[archlinuxcn]
 Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf
-pacman -Syu&&pacman -S archlinuxcn-keyring&&pacman -S iw wpa_supplicant dialog networkmanager xorg-server xterm firefox yaourt
+pacman -Syu&&pacman -S archlinuxcn-keyring&&pacman -S iw wpa_supplicant dialog networkmanager xorg-server xterm firefox yaourt wqy-zenhei wqy-microhei
 systemctl enable NetworkManager
 read -p "do you have bluetooth ? (y or enter  " TMP
 if (("$TMP"=="y"))
