@@ -66,12 +66,9 @@ while [ "$TMP" == n ]
 do
 pacman -Syu&&pacman -S archlinuxcn-keyring&&pacman -S iw wpa_supplicant dialog networkmanager xorg-server xterm firefox yaourt wqy-zenhei wqy-microhei gnome-keyring
 systemctl enable NetworkManager
-if [ "$TMP" == n ]
 then read -p "do you have bluetooth ? (y or enter  " TMP
 if [ "$TMP" == y ]
 then pacman -S bluez blueman&&systemctl enable bluetooth
-TMP=n
-fi
 fi
 read -p "successfully installed ? (n or enter  " TMP
 done
