@@ -1,38 +1,38 @@
 #!/bin/bash
 ##分区
-read -p "do you want to adjust the partition ? (input y to use fdisk or enter to continue:  " TMP
+read -p "Do you want to adjust the partition ? (Input y to use fdisk or Enter to continue:  " TMP
 if [ "$TMP" == y ]
 then fdisk -l
-read -p "which disk do you want to partition ? (/dev/sdX:  " DISK
+read -p "Which disk do you want to partition ? (/dev/sdX:  " DISK
 fdisk $DISK
 fi
 fdisk -l
-read -p "input the / mount point:  " ROOT
-read -p "format it ? (y or enter  " TMP
+read -p "Input the / mount point:  " ROOT
+read -p "Format it ? (y or Enter  " TMP
 if [ "$TMP" == y ]
-then read -p "input y to use ext4 defalut to use btrfs  " TMP
+then read -p "Input y to use ext4 defalut to use btrfs  " TMP
 if [ "$TMP" == y ]
 then mkfs.ext4 $ROOT
 else mkfs.btrfs $ROOT -f
 fi
 mount $ROOT /mnt
 fi
-read -p "do you have the /boot mount point? (y or enter  " BOOT
+read -p "Do you have the /boot mount point? (y or Enter  " BOOT
 if [ "$BOOT" == y ]
 then fdisk -l
-read -p "input the /boot mount point:  " BOOT
-read -p "format it ? (y or enter  " TMP
+read -p "Input the /boot mount point:  " BOOT
+read -p "Format it ? (y or Enter  " TMP
 if [ "$TMP" == y ]
 then mkfs.fat -F32 $ROOT
 fi
 mkdir /mnt/boot
 mount $BOOT /mnt/boot
 fi
-read -p "do you have the swap partition ? (y or enter  " SWAP
+read -p "Do you have the swap partition ? (y or Enter  " SWAP
 if [ "$SWAP" == y ]
 then fdisk -l
-read -p "input the swap mount point:  " SWAP
-read -P "format it ? (y or enter  " TMP
+read -p "Input the swap mount point:  " SWAP
+read -P "Format it ? (y or Enter  " TMP
 if [ "$TMP" == y ]
 then mkswap $SWAP
 fi
@@ -42,7 +42,7 @@ fi
 echo "## China                                                                                               
 #Server = http://mirrors.163.com/archlinux/\$repo/os/\$arch                                               
 Server = http://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-read -p "edit the pacman.conf ? (y or enter  " TMP
+read -p "Edit the pacman.conf ? (y or Enter  " TMP
 if [ "$TMP" == y ]
 then
 nano /etc/pacman.conf
@@ -54,7 +54,7 @@ do
 pacstrap /mnt base base-devel --force
 rm /mnt/etc/fstab
 genfstab -U -p /mnt >> /mnt/etc/fstab
-read -p "successfully installed ? (n or enter  " TMP
+read -p "Successfully installed ? (n or Enter  " TMP
 done
 ##进入已安装的系统
 wget https://raw.githubusercontent.com/yangxins/Arch/master/config.sh
