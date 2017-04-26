@@ -102,7 +102,7 @@ done
 read -p "Input the user name you want to use :  " USER
 useradd -m -g wheel $USER
 passwd $USER
-usermod -aG root bin daemon tty disk games network video audio avahi $USER
+usermod -aG root,bin,daemon,tty,disk,games,network,video,audio $USER
 if (($VIDEO==4))
 then  gpasswd --add $USER bumblebee
 fi
