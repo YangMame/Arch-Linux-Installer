@@ -101,3 +101,17 @@ case $DESKTOP in
     ;;
 esac
 done
+##建立用户
+read -p "input the user name you want to use :  " USER
+useradd -m -g wheel $USER
+passwd $USER
+usermod -aG root bin daemon tty disk games network video audio avahi $USER
+if (($VIDEO==4))
+then  gpasswd --add $USER bumblebee
+fi
+if (($DESKTOP==1))
+then gpasswd --add $USER gdm
+elif (($DESKTOP==2))
+then gpasswd --add $USER sddm
+else gpasswd --add lightdm
+fi
