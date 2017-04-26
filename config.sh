@@ -11,7 +11,7 @@ echo change your root passwd
 passwd
 ##安装引导
 read -p "are you efi ? (y or enter  " TMP
-if (("$TMP"=="y"))
+if [ "$TMP"== y ]
 then pacman -S grub efibootmger -y&&grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch&&grub-mkconfig -o /boot/grub/grub.cfg
 else pacman -S grub&&fdisk -l
 read -p "input the disk you want to install the grub  " GRUB
@@ -22,9 +22,9 @@ fi
 VIDEO=5
 while (($VIDEO!=1&&$VIDEO!=2&&VIDEO!=3&&VIDEO!=4));do
 read -p "what is your video card ? (input the number: intel-1 nvidia-2 intel/nvidia-3 ATI/AMD-4 " VIDEO
-if (($VIDEO == 1))
+if (($VIDEO==1))
 then pacman -S xf86-video-intel -y
-elif (($VIDEO == 2))
+elif (($VIDEO==2))
 then TMP=4
 while (($TMP!=1&&$TMP!=2&&$TMP!=3));do
 read -p "version of nvidia-driver to install (input the number, 1--GeForce-8 and newer 2--GeForce-6/7 3--older  " TMP
@@ -66,9 +66,9 @@ while [ "$TMP" == n ]
 do
 pacman -Syu&&pacman -S archlinuxcn-keyring&&pacman -S iw wpa_supplicant dialog networkmanager xorg-server xterm firefox yaourt wqy-zenhei wqy-microhei gnome-keyring
 systemctl enable NetworkManager
-if (("$TMP"=="n"))
+if [ "$TMP" == n ]
 then read -p "do you have bluetooth ? (y or enter  " TMP
-if (("$TMP"=="y"))
+if [ "$TMP" == y ]
 then pacman -S bluez blueman&&systemctl enable bluetooth
 TMP=n
 fi
@@ -76,7 +76,7 @@ fi
 read -p "successfully installed ? (n or enter  " TMP
 done
 ##安装桌面环境
-echo "which desktop you want to install"
+echo -e "\033[31m which desktop you want to install \033[0m"
 DESKTOP=9
 while (($DESKTOP!=1&&$DESKTOP!=2&&$DESKTOP!=3&&$DESKTOP!=4&&$DESKTOP!=5&&$DESKTOP!=6&&$DESKTOP!=7&&$DESKTOP!=8));do
 read -p "gnome-1 kde-2 lxde-3 lxqt-4 mate-5 xfce-6 deepin-7 budgie-8   " DESKTOP
