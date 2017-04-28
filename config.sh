@@ -12,7 +12,7 @@ passwd
 ##安装引导
 read -p "Are you efi ? (y or Enter  " TMP
 if (("$TMP"=="y"))
-then pacman -S grub efibootmger -y&&grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch&&grub-mkconfig -o /boot/grub/grub.cfg
+then pacman -S grub efibootmgr -y&&grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch&&grub-mkconfig -o /boot/grub/grub.cfg
 else pacman -S grub&&fdisk -l
 read -p "Input the disk you want to install the grub  " GRUB
 grub-install --target=i386-pc $GRUB
