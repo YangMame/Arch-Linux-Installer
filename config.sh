@@ -90,7 +90,7 @@ case $DESKTOP in
     ;;
     6) pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
     ;;
-    7) pacman -S deepin deepin-extra lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm&&echo greeter-session=lightdm-deepin-greeter >>/etc/lightdm/lightdm.conf
+    7) pacman -S deepin deepin-extra lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
     ;;
     8) pacman -S budgie-desktop lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
     ;;
@@ -110,5 +110,5 @@ if (($DESKTOP==1))
 then gpasswd --add $USER gdm
 elif (($DESKTOP==2))
 then gpasswd --add $USER sddm
-else gpasswd --add lightdm
+else gpasswd --add $USER lightdm
 fi
