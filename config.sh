@@ -7,7 +7,7 @@ locale-gen
 echo LANG=zh_CN.UTF-8 > /etc/locale.conf
 read -p "Input your hostname:  " HOSTNAME
 echo $HOSTNAME  > /etc/hostname
-echo change your root passwd
+echo Change your root passwd
 passwd
 ##安装引导
 read -p "Are you efi ? (y or Enter  " TMP
@@ -21,13 +21,22 @@ fi
 ##安装显卡驱动
 VIDEO=5
 while (($VIDEO!=1&&$VIDEO!=2&&VIDEO!=3&&VIDEO!=4));do
-read -p "What is your video card ? (Input the number: intel-1 nvidia-2 intel/nvidia-3 ATI/AMD-4 " VIDEO
+echo "What is your video card ?
+[1]  intel
+[2]  nvidia
+[3]  intel/nvidia
+[4]  ATI/AMD"
+read VIDEO
 if (($VIDEO==1))
 then pacman -S xf86-video-intel -y
 elif (($VIDEO==2))
 then TMP=4
 while (($TMP!=1&&$TMP!=2&&$TMP!=3));do
-read -p "Version of nvidia-driver to install (Input the number, 1--GeForce-8 and newer 2--GeForce-6/7 3--older  " TMP
+echo "Version of nvidia-driver to install:
+[1]  GeForce-8 and newer
+[2]  GeForce-6/7
+[3]  Older  "
+read TMP
 if (($TMP==1))
 then pacman -S nvidia -y
 elif (($TMP==2))
@@ -42,20 +51,24 @@ then pacman -S bumblebee -y
 systemctl enable bumblebeed
 TMP=4
 while (($TMP!=1&&$TMP!=2&&$TMP!=3));do
-read -p "Version of nvidia-driver to install (Input the number, 1--GeForce-8 and newer 2--GeForce-6/7 3--older   " TMP
+echo "Version of nvidia-driver to install:
+[1]  GeForce-8 and newer
+[2]  GeForce-6/7
+[3]  Older   " 
+read TMP
 if (($TMP==1))
 then pacman -S nvidia -y
 elif (($TMP==2))
 then pacman -S nvidia-304xx -y
 elif (($TMP==3))
 then pacman -S nvidia-340xx -y
-else echo error ! input the number again
+else echo Error ! Input the currect number
 fi
 done
 elif (($VIDEO==4))
 then pacman -S xf86-video-ati -y
 else
-echo error ! input the number again
+echo Error ! Input the number again
 fi
 done
 ##安装必要软件/简单配置
@@ -73,10 +86,18 @@ fi
 read -p "Successfully installed ? (n or Enter  " TMP
 done
 ##安装桌面环境
-echo -e "\033[31m Which desktop you want to install \033[0m"
+echo -e "\033[31m Which desktop you want to install :  \033[0m"
 DESKTOP=9
 while (($DESKTOP!=1&&$DESKTOP!=2&&$DESKTOP!=3&&$DESKTOP!=4&&$DESKTOP!=5&&$DESKTOP!=6&&$DESKTOP!=7&&$DESKTOP!=8));do
-read -p "     gnome-1 kde-2 lxde-3 lxqt-4 mate-5 xfce-6 deepin-7 budgie-8   " DESKTOP
+echo " [1]  Gnome
+[2]  Kde
+[3]  Lxde
+[4]  Lxqt
+[5]  Mate
+[6]  Xfce
+[7]  Deepin
+[8]  Budgie "
+read DESKTOP
 case $DESKTOP in
     1) pacman -S gnome --force&&systemctl enable gdm
     ;;
@@ -104,11 +125,11 @@ useradd -m -g wheel $USER
 passwd $USER
 usermod -aG root,bin,daemon,tty,disk,games,network,video,audio $USER
 if (($VIDEO==4))
-then  gpasswd --add $USER bumblebee
+then  gpasswd -a $USER bumblebee
 fi
 if (($DESKTOP==1))
-then gpasswd --add $USER gdm
+then gpasswd -a $USER gdm
 elif (($DESKTOP==2))
-then gpasswd --add $USER sddm
-else gpasswd --add $USER lightdm
+then gpasswd -a $USER sddm
+else gpasswd -a $USER lightdm
 fi

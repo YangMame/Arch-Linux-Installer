@@ -23,7 +23,7 @@ then fdisk -l
 read -p "Input the /boot mount point:  " BOOT
 read -p "Format it ? (y or Enter  " TMP
 if [ "$TMP" == y ]
-then mkfs.fat -F32 $ROOT
+then mkfs.fat -F32 $BOOT
 fi
 mkdir /mnt/boot
 mount $BOOT /mnt/boot
