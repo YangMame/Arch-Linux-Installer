@@ -88,8 +88,8 @@ read -p "Successfully installed ? (n or Enter  " TMP
 done
 ##安装桌面环境
 echo -e "\033[31m Which desktop you want to install :  \033[0m"
-DESKTOP=9
-while (($DESKTOP!=1&&$DESKTOP!=2&&$DESKTOP!=3&&$DESKTOP!=4&&$DESKTOP!=5&&$DESKTOP!=6&&$DESKTOP!=7&&$DESKTOP!=8));do
+DESKTOP=0
+while (($DESKTOP!=1&&$DESKTOP!=2&&$DESKTOP!=3&&$DESKTOP!=4&&$DESKTOP!=5&&$DESKTOP!=6&&$DESKTOP!=7&&$DESKTOP!=8&&$DESKTOP!=9));do
 echo "[1]  Gnome
 [2]  Kde
 [3]  Lxde
@@ -97,26 +97,29 @@ echo "[1]  Gnome
 [5]  Mate
 [6]  Xfce
 [7]  Deepin
-[8]  Budgie "
+[8]  Budgie 
+[9]  Cinnamon"
 read DESKTOP
 case $DESKTOP in
-    1) pacman -S gnome --force&&systemctl enable gdm
+    1) pacman -S gnome
     ;;
-    2) pacman -S plasma kde-applications kde-l10n-zh_cn sddm --force&&systemctl enable sddm
+    2) pacman -S plasma kde-applications kde-l10n-zh_cn sddm
     ;;
-    3) pacman -S lxde lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
+    3) pacman -S lxde lightdm lightdm-gtk-greeter 
     ;;
-    4) pacman -S lxqt lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
+    4) pacman -S lxqt lightdm lightdm-gtk-greeter
     ;;
-    5) pacman -S mate mate-extra lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
+    5) pacman -S mate mate-extra lightdm lightdm-gtk-greeter
     ;;
-    6) pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
+    6) pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter
     ;;
-    7) pacman -S deepin deepin-extra lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
+    7) pacman -S deepin deepin-extra lightdm lightdm-gtk-greeter
     ;;
-    8) pacman -S budgie-desktop lightdm lightdm-gtk-greeter --force&&systemctl enable lightdm
+    8) pacman -S budgie-desktop lightdm lightdm-gtk-greeter
     ;;
-    *) echo error ! input the number again
+    9) pacman -S cinnamon ligthdm lightdm-gtk-greeter
+    ;;
+    *) echo Error ! Input the number again
     ;;
 esac
 done
@@ -130,7 +133,10 @@ then  gpasswd -a $USER bumblebee
 fi
 if (($DESKTOP==1))
 then gpasswd -a $USER gdm
+systemctl enable gdm
 elif (($DESKTOP==2))
 then gpasswd -a $USER sddm
+systemctl enable sddm
 else gpasswd -a $USER lightdm
+systemctl enable lightdm
 fi
