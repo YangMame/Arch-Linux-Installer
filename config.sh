@@ -63,7 +63,7 @@ elif (($TMP==2))
 then pacman -S nvidia-304xx -y
 elif (($TMP==3))
 then pacman -S nvidia-340xx -y
-else echo Error ! Input the currect number
+else echo Error ! Input the currect number !
 fi
 done
 elif (($VIDEO==4))
