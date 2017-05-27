@@ -117,7 +117,7 @@ case $DESKTOP in
     ;;
     8) pacman -S budgie-desktop lightdm lightdm-gtk-greeter
     ;;
-    9) pacman -S cinnamon ligthdm lightdm-gtk-greeter
+    9) pacman -S cinnamon lightdm lightdm-gtk-greeter
     ;;
     *) echo Error ! Input the number again
     ;;
