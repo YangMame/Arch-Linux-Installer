@@ -57,7 +57,7 @@ genfstab -U -p /mnt >> /mnt/etc/fstab
 read -p "Successfully installed ? (n or Enter  " TMP
 done
 ##进入已安装的系统
-wget https://raw.githubusercontent.com/yangxins/Arch/master/config.sh
+wget https://raw.githubusercontent.com/yangxins/Arch-Installer/master/config.sh
 mv config.sh /mnt/root/config.sh
 chmod +x /mnt/root/config.sh
 arch-chroot /mnt /root/config.sh
