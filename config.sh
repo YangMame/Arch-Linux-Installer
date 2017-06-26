@@ -13,13 +13,23 @@ passwd
 ##安装引导
 read -p "Are you efi ? (y or Enter  " TMP
 if (("$TMP"=="y"))
-then pacman -S grub efibootmgr -y&&grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch&&grub-mkconfig -o /boot/grub/grub.cfg
-else pacman -S grub&&fdisk -l
+then TMP=n
+while [ "$TMP" == n ];do
+pacman -S grub efibootmgr -y&&grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch&&grub-mkconfig -o /boot/grub/grub.cfg
+read -p "Successfully installed ? (n or Enter  " TMP
+done
+else TMP=n
+while [ "$TMP" == n ];do
+pacman -S grub&&fdisk -l
 read -p "Input the disk you want to install the grub  " GRUB
 grub-install --target=i386-pc $GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
+read -p "Successfully installed ? (n or Enter  " TMP
+done
 fi
 ##安装显卡驱动
+TMP=n
+while [ "$TMP" == n ];do
 VIDEO=5
 while (($VIDEO!=1&&$VIDEO!=2&&VIDEO!=3&&VIDEO!=4));do
 echo "What is your video card ?
@@ -72,6 +82,8 @@ else
 echo Error ! Input the number again
 fi
 done
+read -p "Successfully installed ? (n or Enter  " TMP
+done
 ##安装必要软件/简单配置
 echo "[archlinuxcn]
 Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf
@@ -87,6 +99,8 @@ fi
 read -p "Successfully installed ? (n or Enter  " TMP
 done
 ##安装桌面环境
+TMP=n
+while [ "$TMP" == n ];do
 echo -e "\033[31m Which desktop you want to install :  \033[0m"
 DESKTOP=0
 while (($DESKTOP!=1&&$DESKTOP!=2&&$DESKTOP!=3&&$DESKTOP!=4&&$DESKTOP!=5&&$DESKTOP!=6&&$DESKTOP!=7&&$DESKTOP!=8&&$DESKTOP!=9));do
@@ -103,7 +117,7 @@ read DESKTOP
 case $DESKTOP in
     1) pacman -S gnome
     ;;
-    2) pacman -S plasma kde-applications kde-l10n-zh_cn sddm
+    2) pacman -S plasma kdebase kde-l10n-zh_cn sddm
     ;;
     3) pacman -S lxde lightdm lightdm-gtk-greeter 
     ;;
@@ -122,6 +136,8 @@ case $DESKTOP in
     *) echo Error ! Input the number again
     ;;
 esac
+done
+read -p "Successfully installed ? (n or Enter  " TMP
 done
 ##建立用户
 read -p "Input the user name you want to use :  " USER
