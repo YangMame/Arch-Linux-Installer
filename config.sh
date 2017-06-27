@@ -117,7 +117,7 @@ read DESKTOP
 case $DESKTOP in
     1) pacman -S gnome
     ;;
-    2) pacman -S plasma kdebase kde-l10n-zh_cn sddm
+    2) pacman -S plasma kdebase kdeutils kdegraphics kde-l10n-zh_cn sddm
     ;;
     3) pacman -S lxde lightdm lightdm-gtk-greeter 
     ;;
