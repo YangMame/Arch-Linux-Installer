@@ -7,3 +7,4 @@ wget raw.githubusercontent.com/yangxins/Arch-Installer/master/live.sh
 chmod +x live.sh
 ./live.sh
 ```
+
