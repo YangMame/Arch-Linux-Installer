@@ -93,7 +93,7 @@ Server = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf
 TMP=n
 while [ "$TMP" == n ]
 do
-    pacman -Syu&&pacman -S --noconfirm archlinuxcn-keyring&&pacman -S --noconfirm networkmanager xorg-server firefox yaourt wqy-zenhei gnome-keyring
+    pacman -Syu&&pacman -S --noconfirm archlinuxcn-keyring&&pacman -S --noconfirm networkmanager xorg-server firefox yaourt wqy-zenhei sudo
     systemctl enable NetworkManager
     read -p "Do you have bluetooth ? (y or Enter  " TMP
     if [ "$TMP" == y ]
@@ -164,6 +164,8 @@ then gpasswd -a $USER sddm
 else gpasswd -a $USER lightdm
     systemctl enable lightdm
 fi
+
+sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers
 
 ##自定义
 TMP=n

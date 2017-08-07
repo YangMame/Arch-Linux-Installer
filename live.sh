@@ -52,8 +52,7 @@ TMP=n
 while [ "$TMP" == n ]
 do
     pacstrap /mnt base base-devel --force
-    rm /mnt/etc/fstab
-    genfstab -U -p /mnt >> /mnt/etc/fstab
+    genfstab -U -p /mnt > /mnt/etc/fstab
     read -p "Successfully installed ? (n or Enter  " TMP
 done
 ##进入已安装的系统
