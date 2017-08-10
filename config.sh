@@ -2,7 +2,7 @@
 read -p "ENTER to continue "
 
 ##必要设置
-ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime -f
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc --utc
 echo zh_CN.UTF-8 UTF-8 > /etc/locale.gen
 locale-gen
