@@ -33,7 +33,7 @@ fi
 TMP=n
 while [ "$TMP" == n ];do
     VIDEO=5
-    while (($VIDEO!=1&&$VIDEO!=2&&VIDEO!=3&&VIDEO!=4));do
+    while (($VIDEO!=1&&$VIDEO!=2&&$VIDEO!=3&&$VIDEO!=4));do
         echo "What is your video card ?
 [1]  intel
 [2]  nvidia
@@ -48,7 +48,7 @@ while [ "$TMP" == n ];do
                 echo "Version of nvidia-driver to install:
 [1]  GeForce-8 and newer
 [2]  GeForce-6/7
-                [3]  Older  "
+[3]  Older  "
                 read TMP
                 if (($TMP==1))
                 then pacman -S --noconfirm nvidia -y
