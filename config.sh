@@ -168,10 +168,6 @@ fi
 sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers
 
 ##自定义
-TMP=n
-while (($TMP == n))
-do
-    read -p	"Input you own command:  " TMP
-    $TMP
-    read -p "Exit ? (n or enter " TMP
-done
+read -p "ENTER TO RUN YOUR OWN COMMAND(Input exit To Quit)"
+bash
+echo "Thanks For Using , If This Helped You Please Star It"
