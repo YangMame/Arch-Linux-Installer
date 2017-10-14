@@ -8,3 +8,4 @@ chmod +x live.sh
 ./live.sh
 ```
 
+[B站视频](https://www.bilibili.com/video/av12820409/)
