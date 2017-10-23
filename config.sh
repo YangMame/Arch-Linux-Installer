@@ -89,7 +89,7 @@ done
 
 ##安装必要软件/简单配置
 echo "[archlinuxcn]
-Server = https://mirrors.163.com/archlinux-cn/\$arch" >> /etc/pacman.conf
+Server = http://mirrors.163.com/archlinux-cn/\$arch" >> /etc/pacman.conf
 TMP=n
 while [ "$TMP" == n ]
 do
