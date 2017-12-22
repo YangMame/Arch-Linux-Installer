@@ -3,7 +3,7 @@
 ## （忽略commits次数 以前无聊刷的）
 ## 进入live系统之后连接网络 执行：
 ```
-wget git.io/vb9IK
+wget git.io/vb9IK -O live.sh
 chmod +x live.sh
 ./live.sh
 ```
