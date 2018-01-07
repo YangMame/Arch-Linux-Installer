@@ -32,7 +32,7 @@ read -p "Do you have the swap partition ? (y or Enter  " SWAP
 if [ "$SWAP" == y ]
 then fdisk -l
     read -p "Input the swap mount point:  " SWAP
-    read -P "Format it ? (y or Enter  " TMP
+    read -p "Format it ? (y or Enter  " TMP
     if [ "$TMP" == y ]
     then mkswap $SWAP
     fi
