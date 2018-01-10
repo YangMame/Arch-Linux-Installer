@@ -12,14 +12,8 @@ color(){
         yellow)
             echo -e "\033[33m$2\033[0m"
         ;;
-        skyblue)
-            echo -e "033[36m$2\033[0m"
-        ;;
         blue)
             echo -e "\033[34m$2\033[0m"
-        ;;
-        white)
-            echo -e "\033[37m$2\033[0m"
         ;;
     esac
 }
@@ -30,28 +24,65 @@ partition(){
     else
         other=/$1
     fi
+
+    fdisk -l
     color green "Input the partition (/dev/sdaX"
     read OTHER
     color green "Format it ? y)yes ENTER)no"
     read tmp
+
     if [ "$tmp" == y ];then
+        umount $OTHER > /dev/null 2>&1
         color green "Input the filesystem's num to format it"
-        select type in 'ext2' "ext4" "btrfs" "xfs" "jfs" "fat" "swap";do
-            if [ "$type" == swap ];then
-                swapoff $OTHER > /dev/null
-                mkswap $OTHER
-                swapon $OTHER
-                break
-            fi
-            umount $OTHER > /dev/null
-            mkfs.$type $OTHER -f
-            mkdir /mnt$other
-            mount $OTHER /mnt$other
-            break
+        select type in 'ext2' "ext3" "ext4" "btrfs" "xfs" "jfs" "fat" "swap";do
+            case $type in
+                "ext2")
+                    mkfs.ext2 $OTHER
+                    break
+                ;;
+                "ext3")
+                    mkfs.ext3 $OTHER
+                    break
+                ;;
+                "ext4")
+                    mkfs.ext4 $OTHER
+                    break
+                ;;
+                "btrfs")
+                    mkfs.btrfs $OTHER -f
+                    break
+                ;;
+                "xfs")
+                    mkfs.xfs $OTHER -f
+                    break
+                ;;
+                "jfs")
+                    mkfs.jfs $OTHER
+                    break
+                ;;
+                "fat")
+                    mkfs.fat -F32 $OTHER
+                    break
+                ;;
+                "swap")
+                    swapoff $OTHER > /dev/null 2>&1
+                    mkswap $OTHER -f
+                    break
+                ;;
+                *)
+                    color red "Error ! Please input the num again"
+                ;;
+            esac
         done
     fi
-    mkdir /mnt/$1
-    mount $OTHER /mnt/$1
+
+    if [ "$1" == "/swap" ];then
+        swapon $OTHER
+    else
+        umount $OTHER > /dev/null 2>&1
+        mkdir /mnt$other
+        mount $OTHER /mnt$other
+    fi
 }
 
 prepare(){
@@ -68,15 +99,16 @@ prepare(){
     color green "Format it ? y)yes ENTER)no"
     read tmp
     if [ "$tmp" == y ];then
+        umount $ROOT > /dev/null 2>&1
         color green "Input the filesystem's num to format it"
         select type in "ext4" "btrfs" "xfs" "jfs";do
-            umount $ROOT > /dev/null
-            mkfs.$type $ROOT -f
+            umount $ROOT > /dev/null 2>&1
+            mkfs.$type $ROOT
             break
         done
     fi
     mount $ROOT /mnt
-    color green "Do you have another mount point ? if so please input it . such as : /boot , /usr or just ENTER to skip"
+    color green "Do you have another mount point ? if so please input it, such as : /boot /home and swap or just ENTER to skip"
     read other
     while [ "$other" != '' ];do
         partition $other
@@ -118,17 +150,19 @@ config(){
 
 if [ "$1" != '' ];then
     case $1 in
-        "prepare")
+        "--prepare")
             prepare
         ;;
-        "install")
+        "--install")
             install
         ;;
-        "chroot")
+        "--chroot")
             config
         ;;
+        "--help")
+            color red "--prepare :  prepare disk and partition\n--install :  install the base system\n--chroot :  chroot into the system to install other software"
         *)
-            color red "Please change to prepare(for disk and partition) , install(install the base system) or chroot(chroot into the system to install other software)"
+            color red "--prepare :  prepare disk and partition\n--install :  install the base system\n--chroot :  chroot into the system to install other software"
         ;;
     esac
 else
