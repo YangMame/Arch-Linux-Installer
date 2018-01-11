@@ -76,7 +76,7 @@ partition(){
         done
     fi
 
-    if [ "$1" == "/swap" ];then
+    if [ "$other" == "/swap" ];then
         swapon $OTHER
     else
         umount $OTHER > /dev/null 2>&1
