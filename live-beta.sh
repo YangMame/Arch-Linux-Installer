@@ -119,7 +119,7 @@ prepare(){
 
 install(){
     color green 'Choose the mirror you want to use (input the num'
-    select mirror in "USTC" "TUNA" "163";do
+    select mirror in "USTC" "TUNA" "163" "LeaseWeb";do
         case $mirror in
             "USTC")
                 echo "Server = http://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
@@ -131,6 +131,10 @@ install(){
             ;;
             "163")
                 echo "Server = http://mirrors.163.com/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
+                break
+            ;;
+            "LeaseWeb")
+                echo "Server = http://mirror.wdc1.us.leaseweb.net/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
                 break
             ;;
             *)
@@ -161,6 +165,7 @@ if [ "$1" != '' ];then
         ;;
         "--help")
             color red "--prepare :  prepare disk and partition\n--install :  install the base system\n--chroot :  chroot into the system to install other software"
+        ;;
         *)
             color red "--prepare :  prepare disk and partition\n--install :  install the base system\n--chroot :  chroot into the system to install other software"
         ;;
