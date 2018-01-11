@@ -1,173 +1,278 @@
 #!/bin/bash
-read -p "ENTER to continue "
 
-##必要设置
-ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-hwclock --systohc --utc
-echo zh_CN.UTF-8 UTF-8 > /etc/locale.gen
-locale-gen
-echo LANG=zh_CN.UTF-8 > /etc/locale.conf
-read -p "Input your hostname:  " HOSTNAME
-echo $HOSTNAME  > /etc/hostname
-echo Change your root passwd
-passwd
-##安装引导
-read -p "Are you efi ? (y or Enter  " TMP
-if (("$TMP"=="y"))
-then TMP=n
-    while [ "$TMP" == n ];do
-        pacman -S --noconfirm grub efibootmgr -y&&grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch&&grub-mkconfig -o /boot/grub/grub.cfg
-        read -p "Successfully installed ? (n or Enter  " TMP
-    done
-else TMP=n
-    while [ "$TMP" == n ];do
-        pacman -S --noconfirm grub&&fdisk -l
-        read -p "Input the disk you want to install the grub  " GRUB
-        grub-install --target=i386-pc $GRUB
-        grub-mkconfig -o /boot/grub/grub.cfg
-        read -p "Successfully installed ? (n or Enter  " TMP
-    done
-fi
+color(){
+    case $1 in
+        red)
+            echo -e "\033[31m$2\033[0m"
+        ;;
+        green)
+            echo -e "\033[32m$2\033[0m"
+        ;;
+        yellow)
+            echo -e "\033[33m$2\033[0m"
+        ;;
+        blue)
+            echo -e "\033[34m$2\033[0m"
+        ;;
+    esac
+}
 
-##安装显卡驱动
-TMP=n
-while [ "$TMP" == n ];do
-    VIDEO=5
-    while (($VIDEO!=1&&$VIDEO!=2&&$VIDEO!=3&&$VIDEO!=4));do
-        echo "What is your video card ?
-[1]  intel
-[2]  nvidia
-[3]  intel/nvidia
-[4]  ATI/AMD"
-        read VIDEO
-        if (($VIDEO==1))
-        then pacman -S --noconfirm xf86-video-intel -y
-        elif (($VIDEO==2))
-        then TMP=4
-            while (($TMP!=1&&$TMP!=2&&$TMP!=3));do
-                echo "Version of nvidia-driver to install:
-[1]  GeForce-8 and newer
-[2]  GeForce-6/7
-[3]  Older  "
-                read TMP
-                if (($TMP==1))
-                then pacman -S --noconfirm nvidia -y
-                elif (($TMP==2))
-                then pacman -S --noconfirm nvidia-304xx -y
-                elif (($TMP==3))
-                then pacman -S --noconfirm nvidia-340xx -y
-                else echo error ! input the number again
-                fi
+config_base(){
+    color blue "Input your hostname"
+    read TMP
+    echo $TMP > /etc/hostname
+    color blue "Change your root passwd"
+    passwd
+}
+
+config_locale(){
+    color blue "Please choose your locale time"
+    select TIME in `ls /usr/share/zoneinfo`;do
+        if [ -d "/usr/share/zoneinfo/$TIME" ];then
+            select time in `ls /usr/share/zoneinfo/$TIME`;do
+                ln -sf /usr/share/zoneinfo/$TIME/$time /etc/localtime
+                break
             done
-        elif (($VIDEO == 3))
-        then pacman -S --noconfirm bumblebee -y
-            systemctl enable bumblebeed
-            TMP=4
-            while (($TMP!=1&&$TMP!=2&&$TMP!=3));do
-                echo "Version of nvidia-driver to install:
-[1]  GeForce-8 and newer
-[2]  GeForce-6/7
-[3]  Older   "
-                read TMP
-                if (($TMP==1))
-                then pacman -S --noconfirm nvidia -y
-                elif (($TMP==2))
-                then pacman -S --noconfirm nvidia-304xx -y
-                elif (($TMP==3))
-                then pacman -S --noconfirm nvidia-340xx -y
-                else echo Error ! Input the currect number !
-                fi
-            done
-        elif (($VIDEO==4))
-        then pacman -S --noconfirm xf86-video-ati -y
         else
-            echo Error ! Input the number again
+            ln -sf /usr/share/zoneinfo/$TIME /etc/localtime
+            break
         fi
     done
-    read -p "Successfully installed ? (n or Enter  " TMP
-done
+    hwclock --systohc --utc
+    color blue "Choose your language"
+    select LNAG in "en_US.UTF-8" "zh_CN.UTF-8";do
+        echo "$LNAG UTF-8" > /etc/locale.gen
+        locale-gen
+        echo LANG=$LANG > /etc/locale.conf
+    done
+}
 
-##安装必要软件/简单配置
-echo "[archlinuxcn]
-Server = http://mirrors.163.com/archlinux-cn/\$arch" >> /etc/pacman.conf
-TMP=n
-while [ "$TMP" == n ]
-do
-    pacman -Syu&&pacman -S --noconfirm archlinuxcn-keyring&&pacman -S --noconfirm networkmanager xorg-server firefox yaourt wqy-zenhei sudo
-    systemctl enable NetworkManager
-    read -p "Do you have bluetooth ? (y or Enter  " TMP
-    if [ "$TMP" == y ]
-    then pacman -S --noconfirm bluez blueman&&systemctl enable bluetooth
+install_grub(){
+    if (mount | grep efivarfs > /dev/null 2>&1);then
+        pacman -S --noconfirm grub efibootmgr -y
+        grub-install --target=`uname -m`-efi --efi-directory=/boot --bootloader-id=Arch
+        grub-mkconfig -o /boot/grub/grub.cfg
+    else
+        pacman -S --noconfirm grub
+        fdisk -l
+        color blue "Input the disk you want to install grub"
+        read TMP
+        grub-install --target=i386-pc $GRUB
+        grub-mkconfig -o /boot/grub/grub.cfg
     fi
-    read -p "Successfully installed ? (n or Enter  " TMP
-done
+}
 
-##安装桌面环境
-TMP=n
-while [ "$TMP" == n ];do
-    echo -e "\033[31m Which desktop you want to install :  \033[0m"
-    DESKTOP=0
-    while (($DESKTOP!=1&&$DESKTOP!=2&&$DESKTOP!=3&&$DESKTOP!=4&&$DESKTOP!=5&&$DESKTOP!=6&&$DESKTOP!=7&&$DESKTOP!=8&&$DESKTOP!=9&&$DESKTOP!=10));do
-        echo "[1]  Gnome
-[2]  Kde
-[3]  Lxde
-[4]  Lxqt
-[5]  Mate
-[6]  Xfce
-[7]  Deepin
-[8]  Budgie
-[9]  Cinnamon
-[10]  i3wm"
-        read DESKTOP
-        case $DESKTOP in
-            1) pacman -S --noconfirm gnome
+install_bootctl(){
+    if (mount | grep efivarfs > /dev/null 2>&1);then
+        bootctl --path=esp install
+        bootctl --path=esp update
+    else
+        color yellow "Looks like your PC doesn't suppot UEFI or not in UEFI mode ENTER to use grub. Input q to quit"
+        read TMP
+        if [ "$TMP" == "" ];then
+            install_grub
+        else
+            exit
+        fi
+    fi
+}
+
+add_user(){
+    color blue "Input the user name you want to use (must be lower case)"
+    read USER
+    useradd -m -g wheel $USER
+    usermod -aG root,bin,daemon,tty,disk,network,video,audio $USER
+    color blue "Set the passwd"
+    passwd $USER
+    pacman -S --noconfirm sudo
+    sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers
+}
+
+install_graphic(){
+    color blue "What is your video graphic card?"
+    select GPU in "Intel" "Nvidia" "Intel and Nvidia" "AMD";do
+        case $GPU in
+            "Intel")
+                pacman -S --noconfirm xf86-video-intel -y
+                break
             ;;
-            2) pacman -S --noconfirm plasma kdebase kdeutils kdegraphics kde-l10n-zh_cn sddm
+            "Nvidia")
+                color blue "Version of nvidia-driver to install"
+                select NVIDIA in "GeForce-8 and newer" "GeForce-6/7" "Older";do
+                    case $NVIDIA in
+                        "GeForce-8 and newer")
+                            pacman -S --noconfirm nvidia -y
+                            break
+                        ;;
+                        "GeForce-6/7")
+                            pacman -S --noconfirm nvidia-304xx -y
+                            break
+                        ;;
+                        "Older")
+                            pacman -S --noconfirm nvidia-340xx -y
+                            break
+                        ;;
+                        *)
+                            color red "Error ! Please input the correct num"
+                        ;;
+                    esac
+                done
+                break
             ;;
-            3) pacman -S --noconfirm lxde lightdm lightdm-gtk-greeter
+            "Intel and Nvidia")
+                pacman -S --noconfirm bumblebee -y
+                systemctl enable bumblebeed
+                select NVIDIA in "GeForce-8 and newer" "GeForce-6/7" "Older";do
+                    case $NVIDIA in
+                        "GeForce-8 and newer")
+                            pacman -S --noconfirm nvidia -y
+                            break
+                        ;;
+                        "GeForce-6/7")
+                            pacman -S --noconfirm nvidia-304xx -y
+                            break
+                        ;;
+                        "Older")
+                            pacman -S --noconfirm nvidia-340xx -y
+                            break
+                        ;;
+                        *)
+                            color red "Error ! Please input the correct num"
+                        ;;
+                    esac
+                done
+                break
             ;;
-            4) pacman -S --noconfirm lxqt lightdm lightdm-gtk-greeter
+            "AMD")
+                pacman -S --noconfirm xf86-video-ati -y
+                break
             ;;
-            5) pacman -S --noconfirm mate mate-extra lightdm lightdm-gtk-greeter
-            ;;
-            6) pacman -S --noconfirm xfce4 xfce4-goodies lightdm lightdm-gtk-greeter
-            ;;
-            7) pacman -S --noconfirm deepin deepin-extra lightdm lightdm-gtk-greeter&&sed -i '108s/#greeter-session=example-gtk-gnome/greeter-session=lightdm-deepin-greeter/' /etc/lightdm/lightdm.conf
-            ;;
-            8) pacman -S--noconfirm  budgie-desktop lightdm lightdm-gtk-greeter
-            ;;
-            9) pacman -S --noconfirm cinnamon lightdm lightdm-gtk-greeter
-            ;;
-            10) pacman -S --noconfirm i3 rofi rxvt-unicode lightdm lightdm-gtk-greeter
-            ;;
-            *) echo Error ! Input the number again
+            *)
+                color red "Error ! Please input the correct num"
             ;;
         esac
     done
-    read -p "Successfully installed ? (n or Enter  " TMP
-done
+}
 
-##建立用户
-read -p "Input the user name you want to use :  " USER
-useradd -m -g wheel $USER
-passwd $USER
-usermod -aG root,bin,daemon,tty,disk,network,video,audio $USER
-if (($VIDEO==4))
-then  gpasswd -a $USER bumblebee
-fi
-if (($DESKTOP==1))
-then gpasswd -a $USER gdm
-    systemctl enable gdm
-elif (($DESKTOP==2))
-then gpasswd -a $USER sddm
-    systemctl enable sddm
-else gpasswd -a $USER lightdm
+install_bluetooth(){
+    pacman -S --noconfirm bluez
+    systemctl enable bluetooth
+    color blue "Install blueman? y)YES ENTER)NO"
+    read TMP
+    if [ "$TMP" == "y" ];then
+        pacman -S --noconfirm blueman
+    fi
+}
+
+install_app(){
+    color blue "Install yaourt from archlinuxcn ? y)YES ENTER)NO"
+    read TMP
+    if [ "$TMP" == "y" ];then
+        echo -e "[archlinuxcn]\nServer = http://mirrors.163.com/archlinux-cn/\$arch" >> /etc/pacman.conf
+        pacman -S --noconfirm archlinuxcn-keyring
+        pacman -S --noconfirm yaourt
+    else
+        pacman -S --noconfirm git
+        su - $USER -c "cd ~
+            git clone https://aur.archlinux.org/package-query.git
+            cd package-query
+            makepkg -si
+            cd ..
+            git clone https://aur.archlinux.org/yaourt.git
+            cd yaourt
+            makepkg -si
+            cd .."
+        fi
+    pacman -S --noconfirm networkmanager xorg-server firefox wqy-zenhei
+    systemctl enable NetworkManager
+    gpasswd -a $USER plugdev
+    if [ "$GPU" == "Intel and Nvidia" ];then
+        gpasswd -a $USER bumblebee
+    fi
+}
+
+lightdm_config(){
+    gpasswd -a $USER lightdm
     systemctl enable lightdm
-fi
+}
 
-sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers
+install_desktop(){
+    color blue "Choose the desktop you want to use"
+    select DESKTOP in "KDE" "Gnome" "Lxde" "Lxqt" "Mate" "Xfce" "Deepin" "Budgie" "Cinnamon";do
+        case DESKTOP in
+            "KDE")
+                pacman -S --noconfirm plasma kdebase kdeutils kdegraphics kde-l10n-zh_cn sddm
+                gpasswd -a $USER sddm
+                systemctl enable sddm
+                break
+            ;;
+            "Gnome")
+                pacman -S --noconfirm gnome
+                gpasswd -a $USER gdm
+                systemctl enable gdm
+                break
+            ;;
+            "Lxde")
+                pacman -S --noconfirm lxde lightdm lightdm-gtk-greeter
+                lightdm_config
+                break
+            ;;
+            "Lxqt")
+                pacman -S --noconfirm lxqt lightdm lightdm-gtk-greeter
+                lightdm_config
+                break
+            ;;
+            "Mate")
+                pacman -S --noconfirm mate mate-extra lightdm lightdm-gtk-greeter
+                lightdm_config
+                break
+            ;;
+            "Xfce")
+                pacman -S --noconfirm xfce4 xfce4-goodies lightdm lightdm-gtk-greeter
+                lightdm_config
+                break
+            ;;
+            "Deepin")
+                pacman -S --noconfirm deepin deepin-extra lightdm lightdm-gtk-greeter
+                lightdm_config
+                sed -i '108s/#greeter-session=example-gtk-gnome/greeter-session=lightdm-deepin-greeter/' /etc/lightdm/lightdm.conf
+                break
+            ;;
+            "Budgie")
+                pacman -S--noconfirm budgie-desktop lightdm lightdm-gtk-greeter
+                lightdm_config
+                break
+            ;;
+            "Cinnamon")
+                pacman -S --noconfirm cinnamon lightdm lightdm-gtk-greeter
+                lightdm_config
+                break
+            ;;
+            *)
+                color red "Error ! Please input the correct num"
+            ;;
+        esac
+}
 
-##自定义
-read -p "ENTER TO RUN YOUR OWN COMMAND(Input exit To Quit)"
-bash
-echo "Thanks For Using , If This Helped You Please Star It"
+main()[
+    config_base
+    config_locale
+    color blue "Use GRUB or Bootctl ? y)Bootctl ENTER)GRUB"
+    read TMP
+    if [ "$TMP" == "y" ];then
+        install_bootctl
+    else
+        install_grub
+    fi
+    add_user
+    install_graphic
+    color blue "Do you have bluetooth ? y)YES ENTER)NO"
+    read TMP
+    if [ "$TMP" == "y"];then
+        install_bluetooth
+    fi
+    install_app
+    install_desktop
+]
+
+main
