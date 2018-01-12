@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 color(){
     case $1 in
         red)
@@ -37,6 +39,7 @@ config_locale(){
             ln -sf /usr/share/zoneinfo/$TIME /etc/localtime
             break
         fi
+        break
     done
     hwclock --systohc --utc
     color blue "Choose your language"
@@ -44,6 +47,7 @@ config_locale(){
         echo "$LNAG UTF-8" > /etc/locale.gen
         locale-gen
         echo LANG=$LANG > /etc/locale.conf
+        break
     done
 }
 
@@ -57,7 +61,7 @@ install_grub(){
         fdisk -l
         color blue "Input the disk you want to install grub"
         read TMP
-        grub-install --target=i386-pc $GRUB
+        grub-install --target=i386-pc $TMP
         grub-mkconfig -o /boot/grub/grub.cfg
     fi
 }
@@ -122,6 +126,7 @@ install_graphic(){
             "Intel and Nvidia")
                 pacman -S --noconfirm bumblebee -y
                 systemctl enable bumblebeed
+                color blue "Version of nvidia-driver to install"
                 select NVIDIA in "GeForce-8 and newer" "GeForce-6/7" "Older";do
                     case $NVIDIA in
                         "GeForce-8 and newer")
@@ -252,9 +257,10 @@ install_desktop(){
                 color red "Error ! Please input the correct num"
             ;;
         esac
+    done
 }
 
-main()[
+main(){
     config_base
     config_locale
     color blue "Use GRUB or Bootctl ? y)Bootctl ENTER)GRUB"
@@ -268,11 +274,11 @@ main()[
     install_graphic
     color blue "Do you have bluetooth ? y)YES ENTER)NO"
     read TMP
-    if [ "$TMP" == "y"];then
+    if [ "$TMP" == "y" ];then
         install_bluetooth
     fi
     install_app
     install_desktop
-]
+}
 
 main
