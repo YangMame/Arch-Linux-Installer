@@ -7,28 +7,22 @@ color(){
         red)
             echo -e "\033[31m$2\033[0m"
         ;;
-        green)
-            echo -e "\033[32m$2\033[0m"
-        ;;
         yellow)
             echo -e "\033[33m$2\033[0m"
-        ;;
-        blue)
-            echo -e "\033[34m$2\033[0m"
         ;;
     esac
 }
 
 config_base(){
-    color blue "Input your hostname"
+    color yellow "Input your hostname"
     read TMP
     echo $TMP > /etc/hostname
-    color blue "Change your root passwd"
+    color yellow "Change your root passwd"
     passwd
 }
 
 config_locale(){
-    color blue "Please choose your locale time"
+    color yellow "Please choose your locale time"
     select TIME in `ls /usr/share/zoneinfo`;do
         if [ -d "/usr/share/zoneinfo/$TIME" ];then
             select time in `ls /usr/share/zoneinfo/$TIME`;do
@@ -42,7 +36,7 @@ config_locale(){
         break
     done
     hwclock --systohc --utc
-    color blue "Choose your language"
+    color yellow "Choose your language"
     select LNAG in "en_US.UTF-8" "zh_CN.UTF-8";do
         echo "$LNAG UTF-8" > /etc/locale.gen
         locale-gen
@@ -59,7 +53,7 @@ install_grub(){
     else
         pacman -S --noconfirm grub
         fdisk -l
-        color blue "Input the disk you want to install grub"
+        color yellow "Input the disk you want to install grub"
         read TMP
         grub-install --target=i386-pc $TMP
         grub-mkconfig -o /boot/grub/grub.cfg
@@ -82,18 +76,19 @@ install_bootctl(){
 }
 
 add_user(){
-    color blue "Input the user name you want to use (must be lower case)"
+    color yellow "Input the user name you want to use (must be lower case)"
     read USER
     useradd -m -g wheel $USER
     usermod -aG root,bin,daemon,tty,disk,network,video,audio $USER
-    color blue "Set the passwd"
+    color yellow "Set the passwd"
     passwd $USER
     pacman -S --noconfirm sudo
     sed -i 's/\# \%wheel ALL=(ALL) ALL/\%wheel ALL=(ALL) ALL/g' /etc/sudoers
+    sed -i 's/\# \%wheel ALL=(ALL) NOPASSWD: ALL/\%wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers
 }
 
 install_graphic(){
-    color blue "What is your video graphic card?"
+    color yellow "What is your video graphic card?"
     select GPU in "Intel" "Nvidia" "Intel and Nvidia" "AMD";do
         case $GPU in
             "Intel")
@@ -101,7 +96,7 @@ install_graphic(){
                 break
             ;;
             "Nvidia")
-                color blue "Version of nvidia-driver to install"
+                color yellow "Version of nvidia-driver to install"
                 select NVIDIA in "GeForce-8 and newer" "GeForce-6/7" "Older";do
                     case $NVIDIA in
                         "GeForce-8 and newer")
@@ -126,7 +121,7 @@ install_graphic(){
             "Intel and Nvidia")
                 pacman -S --noconfirm bumblebee -y
                 systemctl enable bumblebeed
-                color blue "Version of nvidia-driver to install"
+                color yellow "Version of nvidia-driver to install"
                 select NVIDIA in "GeForce-8 and newer" "GeForce-6/7" "Older";do
                     case $NVIDIA in
                         "GeForce-8 and newer")
@@ -162,7 +157,7 @@ install_graphic(){
 install_bluetooth(){
     pacman -S --noconfirm bluez
     systemctl enable bluetooth
-    color blue "Install blueman? y)YES ENTER)NO"
+    color yellow "Install blueman? y)YES ENTER)NO"
     read TMP
     if [ "$TMP" == "y" ];then
         pacman -S --noconfirm blueman
@@ -170,23 +165,41 @@ install_bluetooth(){
 }
 
 install_app(){
-    color blue "Install yaourt from archlinuxcn ? y)YES ENTER)NO"
+    color yellow "Install yaourt from archlinuxcn ? (just for China users) y)YES ENTER)NO"
     read TMP
     if [ "$TMP" == "y" ];then
-        echo -e "[archlinuxcn]\nServer = http://mirrors.163.com/archlinux-cn/\$arch" >> /etc/pacman.conf
+        sed -i '/archlinuxcn/d' /etc/pacman.conf
+        select MIRROR in "USTC" "TUNA" "163";do
+            case $MIRROR in
+                "USTC")
+                    echo -e "[archlinuxcn]\nServer = https://mirrors.ustc.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf
+                    break
+                ;;
+                "TUNA")
+                    echo -e "[archlinuxcn]\nServer = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf
+                    break
+                ;;
+                "163")
+                    echo -e "[archlinuxcn]\nServer = http://mirrors.163.com/archlinux-cn/\$arch" >> /etc/pacman.conf
+                    break
+                ;;
+                *)
+                    color red "Error ! Please input the correct num"
+                ;;
+            esac
+        done
         pacman -S --noconfirm archlinuxcn-keyring
         pacman -S --noconfirm yaourt
     else
         pacman -S --noconfirm git
         su - $USER -c "cd ~
             git clone https://aur.archlinux.org/package-query.git
-            cd package-query
-            makepkg -si
+            cd package-query&&makepkg -si
             cd ..
             git clone https://aur.archlinux.org/yaourt.git
-            cd yaourt
-            makepkg -si
-            cd .."
+            cd yaourt&&makepkg -si
+            cd ..
+            rm -rf package-query yaourt"
         fi
     pacman -S --noconfirm networkmanager xorg-server firefox wqy-zenhei
     systemctl enable NetworkManager
@@ -202,7 +215,7 @@ lightdm_config(){
 }
 
 install_desktop(){
-    color blue "Choose the desktop you want to use"
+    color yellow "Choose the desktop you want to use"
     select DESKTOP in "KDE" "Gnome" "Lxde" "Lxqt" "Mate" "Xfce" "Deepin" "Budgie" "Cinnamon";do
         case DESKTOP in
             "KDE")
@@ -263,7 +276,7 @@ install_desktop(){
 main(){
     config_base
     config_locale
-    color blue "Use GRUB or Bootctl ? y)Bootctl ENTER)GRUB"
+    color yellow "Use GRUB or Bootctl ? y)Bootctl ENTER)GRUB"
     read TMP
     if [ "$TMP" == "y" ];then
         install_bootctl
@@ -272,7 +285,7 @@ main(){
     fi
     add_user
     install_graphic
-    color blue "Do you have bluetooth ? y)YES ENTER)NO"
+    color yellow "Do you have bluetooth ? y)YES ENTER)NO"
     read TMP
     if [ "$TMP" == "y" ];then
         install_bluetooth
