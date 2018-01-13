@@ -53,7 +53,7 @@ install_grub(){
     else
         pacman -S --noconfirm grub
         fdisk -l
-        color yellow "Input the disk you want to install grub"
+        color yellow "Input the disk you want to install grub (/dev/sdX"
         read TMP
         grub-install --target=i386-pc $TMP
         grub-mkconfig -o /boot/grub/grub.cfg
@@ -203,7 +203,6 @@ install_app(){
         fi
     pacman -S --noconfirm networkmanager xorg-server firefox wqy-zenhei
     systemctl enable NetworkManager
-    gpasswd -a $USER plugdev
     if [ "$GPU" == "Intel and Nvidia" ];then
         gpasswd -a $USER bumblebee
     fi

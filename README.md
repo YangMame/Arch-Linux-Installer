@@ -1,11 +1,20 @@
-# Arch Linux的半自动安装脚本，适用于Intel，NVIDIA和Intel/NVIDIA双显卡
-## 支持安装主流桌面
-## （忽略commits次数 以前无聊刷的）
-## 进入live系统之后连接网络 执行：
+## Arch Linux 10分钟脚本
+
+#### 功能：
+* 配置分区
+* 安装基本系统
+* 安装显卡驱动（支持Intel/Nvidia双显卡）
+* 安装配置蓝牙
+* 建立用户
+* 安装必要软件
+* 支持选择主流桌面
+---
+#### 使用方法：
+进入live系统连接网络后执行：
 ```
 wget git.io/vb9IK -O live.sh
 chmod +x live.sh
 ./live.sh
 ```
 
-[B站视频](https://www.bilibili.com/video/av12820409/)
+*注意查看带有颜色的提示*
