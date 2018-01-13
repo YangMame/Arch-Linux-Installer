@@ -9,9 +9,6 @@ color(){
         green)
             echo -e "\033[32m$2\033[0m"
         ;;
-        yellow)
-            echo -e "\033[33m$2\033[0m"
-        ;;
     esac
 }
 
