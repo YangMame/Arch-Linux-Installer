@@ -14,7 +14,7 @@ color(){
 
 partition(){
     if (echo $1 | grep '/' > /dev/null 2>&1);then
-        :
+        other=$1
     else
         other=/$1
     fi
@@ -118,30 +118,12 @@ prepare(){
 }
 
 install(){
-    color green 'Choose the mirror you want to use (input the num'
-    select mirror in "USTC" "TUNA" "163" "LeaseWeb";do
-        case $mirror in
-            "USTC")
-                echo "Server = http://mirrors.ustc.edu.cn/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-                break
-            ;;
-            "TUNA")
-                echo "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-                break
-            ;;
-            "163")
-                echo "Server = http://mirrors.163.com/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-                break
-            ;;
-            "LeaseWeb")
-                echo "Server = http://mirror.wdc1.us.leaseweb.net/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-                break
-            ;;
-            *)
-                color red "Please input the correct num"
-            ;;
-        esac
-    done
+    color green 'Auto choose the top 6 fast mirrors that you can use'
+    mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+    wget -O /etc/pacman.d/mirrorlist.bak https://www.archlinux.org/mirrorlist/?country=CN
+    sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.bak
+    rankmirrors -n 6 /etc/pacman.d/mirrorlist.bak > /etc/pacman.d/mirrorlist
+    chmod +r /etc/pacman.d/mirrorlist
     pacstrap /mnt base base-devel --force
     genfstab -U -p /mnt > /mnt/etc/fstab
 }

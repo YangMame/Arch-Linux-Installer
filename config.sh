@@ -219,50 +219,50 @@ install_desktop(){
     select DESKTOP in "KDE" "Gnome" "Lxde" "Lxqt" "Mate" "Xfce" "Deepin" "Budgie" "Cinnamon";do
         case $DESKTOP in
             "KDE")
-                pacman -S --noconfirm plasma kdebase kdeutils kdegraphics kde-l10n-zh_cn sddm
+                pacman -S plasma kdebase kdeutils kdegraphics kde-l10n-zh_cn sddm
                 gpasswd -a $USER sddm
                 systemctl enable sddm
                 break
             ;;
             "Gnome")
-                pacman -S --noconfirm gnome
+                pacman -S gnome
                 gpasswd -a $USER gdm
                 systemctl enable gdm
                 break
             ;;
             "Lxde")
-                pacman -S --noconfirm lxde lightdm lightdm-gtk-greeter
+                pacman -S lxde lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
             "Lxqt")
-                pacman -S --noconfirm lxqt lightdm lightdm-gtk-greeter
+                pacman -S lxqt lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
             "Mate")
-                pacman -S --noconfirm mate mate-extra lightdm lightdm-gtk-greeter
+                pacman -S mate mate-extra lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
             "Xfce")
-                pacman -S --noconfirm xfce4 xfce4-goodies lightdm lightdm-gtk-greeter
+                pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
             "Deepin")
-                pacman -S --noconfirm deepin deepin-extra lightdm lightdm-gtk-greeter
+                pacman -S deepin deepin-extra lightdm lightdm-gtk-greeter
                 lightdm_config
                 sed -i '108s/#greeter-session=example-gtk-gnome/greeter-session=lightdm-deepin-greeter/' /etc/lightdm/lightdm.conf
                 break
             ;;
             "Budgie")
-                pacman -S--noconfirm budgie-desktop lightdm lightdm-gtk-greeter
+                pacman -S budgie-desktop lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
             "Cinnamon")
-                pacman -S --noconfirm cinnamon lightdm lightdm-gtk-greeter
+                pacman -S cinnamon lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
