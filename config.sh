@@ -217,7 +217,7 @@ lightdm_config(){
 install_desktop(){
     color yellow "Choose the desktop you want to use"
     select DESKTOP in "KDE" "Gnome" "Lxde" "Lxqt" "Mate" "Xfce" "Deepin" "Budgie" "Cinnamon";do
-        case DESKTOP in
+        case $DESKTOP in
             "KDE")
                 pacman -S --noconfirm plasma kdebase kdeutils kdegraphics kde-l10n-zh_cn sddm
                 gpasswd -a $USER sddm
