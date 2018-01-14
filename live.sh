@@ -97,7 +97,13 @@ prepare(){
         color green "Input the filesystem's num to format it"
         select type in "ext4" "btrfs" "xfs" "jfs";do
             umount $ROOT > /dev/null 2>&1
-            mkfs.$type $ROOT
+            if [ "type" == "btrfs" ];then
+                mkfs.$type $ROOT -f
+            elif [ "type" == "xfs" ];then
+                mkfs.$type $ROOT -f
+            else
+                mkfs.$type $ROOT
+            fi
             break
         done
     fi
