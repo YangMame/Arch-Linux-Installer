@@ -188,6 +188,7 @@ install_app(){
                 ;;
             esac
         done
+        pacman -Sy
         pacman -S --noconfirm archlinuxcn-keyring
         pacman -S --noconfirm yaourt
     else
