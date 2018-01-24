@@ -119,7 +119,7 @@ prepare(){
 
 install(){
 
-    color green "Generating mirror list , Please wait a minute"
+    color green "Generating mirror list , Please wait"
     
     mv /etc/pacman.d/mirrorlist /etc/mirrorlist.bak
     wget https://www.archlinux.org/mirrorlist/all/https/ -O /etc/pacman.d/mirrorlist.new
