@@ -225,7 +225,7 @@ install_desktop(){
                 break
             ;;
             "Gnome")
-                pacman -S gnome
+                pacman -S gnome gnome-terminal
                 gpasswd -a $USER gdm
                 systemctl enable gdm
                 break
@@ -241,28 +241,28 @@ install_desktop(){
                 break
             ;;
             "Mate")
-                pacman -S mate mate-extra lightdm lightdm-gtk-greeter
+                pacman -S mate mate-extra mate-terminal lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
             "Xfce")
-                pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter
+                pacman -S xfce4 xfce4-goodies xfce4-terminal lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
             "Deepin")
-                pacman -S deepin deepin-extra lightdm lightdm-gtk-greeter
+                pacman -S deepin deepin-extra deepin-terminal lightdm lightdm-gtk-greeter
                 lightdm_config
                 sed -i '108s/#greeter-session=example-gtk-gnome/greeter-session=lightdm-deepin-greeter/' /etc/lightdm/lightdm.conf
                 break
             ;;
             "Budgie")
-                pacman -S budgie-desktop lightdm lightdm-gtk-greeter
+                pacman -S budgie-desktop gnome-terminal lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
             "Cinnamon")
-                pacman -S cinnamon lightdm lightdm-gtk-greeter
+                pacman -S cinnamon gnome-terminal lightdm lightdm-gtk-greeter
                 lightdm_config
                 break
             ;;
@@ -292,6 +292,7 @@ main(){
     fi
     install_app
     install_desktop
+    color yellow "Done , Thanks for using"
 }
 
 main
