@@ -118,12 +118,15 @@ prepare(){
 }
 
 install(){
-    color green 'Auto choose the top 6 fast mirrors that you can use'
-    mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    wget -O /etc/pacman.d/mirrorlist.bak https://www.archlinux.org/mirrorlist/?country=CN
-    sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.bak
-    rankmirrors -n 6 /etc/pacman.d/mirrorlist.bak > /etc/pacman.d/mirrorlist
+
+    color green "Generating mirror list , Please wait a minute"
+    
+    mv /etc/pacman.d/mirrorlist /etc/mirrorlist.bak
+    wget https://www.archlinux.org/mirrorlist/all/https/ -O /etc/pacman.d/mirrorlist.new
+    sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.new
+    rankmirrors -n 3 /etc/pacman.d/mirrorlist.new > /etc/pacman.d/mirrorlist
     chmod +r /etc/pacman.d/mirrorlist
+    
     pacstrap /mnt base base-devel --force
     genfstab -U -p /mnt > /mnt/etc/fstab
 }
