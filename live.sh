@@ -122,7 +122,7 @@ install(){
     color green "Generating mirror list , Please wait"
     
     mv /etc/pacman.d/mirrorlist /etc/mirrorlist.bak
-    wget https://www.archlinux.org/mirrorlist/all/https/ -O /etc/pacman.d/mirrorlist.new
+    wget https://www.archlinux.org/mirrorlist/\?country=CN\&protocol=https -O /etc/pacman.d/mirrorlist.new
     sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.new
     rankmirrors -n 3 /etc/pacman.d/mirrorlist.new > /etc/pacman.d/mirrorlist
     chmod +r /etc/pacman.d/mirrorlist
