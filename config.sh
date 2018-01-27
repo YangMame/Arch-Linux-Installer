@@ -169,6 +169,7 @@ install_app(){
     read TMP
     if [ "$TMP" == "y" ];then
         sed -i '/archlinuxcn/d' /etc/pacman.conf
+        sed -i '/archlinux-cn/d' /etc/pacman.conf
         select MIRROR in "USTC" "TUNA" "163";do
             case $MIRROR in
                 "USTC")
