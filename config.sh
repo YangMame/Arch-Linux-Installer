@@ -79,7 +79,6 @@ add_user(){
     color yellow "Input the user name you want to use (must be lower case)"
     read USER
     useradd -m -g wheel $USER
-    usermod -aG root,bin,daemon,tty,disk,network,video,audio $USER
     color yellow "Set the passwd"
     passwd $USER
     pacman -S --noconfirm sudo
