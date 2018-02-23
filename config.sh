@@ -209,11 +209,6 @@ install_app(){
     fi
 }
 
-lightdm_config(){
-    gpasswd -a $USER lightdm
-    systemctl enable lightdm
-}
-
 install_desktop(){
     color yellow "Choose the desktop you want to use"
     select DESKTOP in "KDE" "Gnome" "Lxde" "Lxqt" "Mate" "Xfce" "Deepin" "Budgie" "Cinnamon";do
@@ -232,38 +227,38 @@ install_desktop(){
             ;;
             "Lxde")
                 pacman -S lxde lightdm lightdm-gtk-greeter
-                lightdm_config
+                systemctl enable lightdm
                 break
             ;;
             "Lxqt")
                 pacman -S lxqt lightdm lightdm-gtk-greeter
-                lightdm_config
+                systemctl enable lightdm
                 break
             ;;
             "Mate")
                 pacman -S mate mate-extra mate-terminal lightdm lightdm-gtk-greeter
-                lightdm_config
+                systemctl enable lightdm
                 break
             ;;
             "Xfce")
                 pacman -S xfce4 xfce4-goodies xfce4-terminal lightdm lightdm-gtk-greeter
-                lightdm_config
+                systemctl enable lightdm
                 break
             ;;
             "Deepin")
                 pacman -S deepin deepin-extra deepin-terminal lightdm lightdm-gtk-greeter
-                lightdm_config
+                systemctl enable lightdm
                 sed -i '108s/#greeter-session=example-gtk-gnome/greeter-session=lightdm-deepin-greeter/' /etc/lightdm/lightdm.conf
                 break
             ;;
             "Budgie")
                 pacman -S budgie-desktop gnome-terminal lightdm lightdm-gtk-greeter
-                lightdm_config
+                systemctl enable lightdm
                 break
             ;;
             "Cinnamon")
                 pacman -S cinnamon gnome-terminal lightdm lightdm-gtk-greeter
-                lightdm_config
+                systemctl enable lightdm
                 break
             ;;
             *)
