@@ -215,13 +215,11 @@ install_desktop(){
         case $DESKTOP in
             "KDE")
                 pacman -S plasma kdebase kdeutils kdegraphics kde-l10n-zh_cn sddm
-                gpasswd -a $USER sddm
                 systemctl enable sddm
                 break
             ;;
             "Gnome")
                 pacman -S gnome gnome-terminal
-                gpasswd -a $USER gdm
                 systemctl enable gdm
                 break
             ;;
