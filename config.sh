@@ -167,7 +167,7 @@ install_bluetooth(){
 }
 
 install_app(){
-    color yellow "Install yaourt from archlinuxcn ? (just for China users) y)YES ENTER)NO"
+    color yellow "Install yaourt from archlinuxcn or use git ? (just for China users) y)YES ENTER)NO"
     read TMP
     if [ "$TMP" == "y" ];then
         sed -i '/archlinuxcn/d' /etc/pacman.conf

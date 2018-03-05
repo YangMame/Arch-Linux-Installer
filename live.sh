@@ -127,6 +127,7 @@ install(){
         sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.new
         rankmirrors -n 3 /etc/pacman.d/mirrorlist.new > /etc/pacman.d/mirrorlist
         chmod +r /etc/pacman.d/mirrorlist
+	break
     done
 
     pacstrap /mnt base base-devel --force
