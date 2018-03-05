@@ -119,14 +119,16 @@ prepare(){
 
 install(){
 
-    color green "Generating mirror list , Please wait"
-    
-    mv /etc/pacman.d/mirrorlist /etc/mirrorlist.bak
-    wget https://www.archlinux.org/mirrorlist/\?country=CN\&protocol=https -O /etc/pacman.d/mirrorlist.new
-    sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.new
-    rankmirrors -n 3 /etc/pacman.d/mirrorlist.new > /etc/pacman.d/mirrorlist
-    chmod +r /etc/pacman.d/mirrorlist
-    
+    color green "Please choose your country (for Generate the pacman mirror list"
+    select COUNTRY in "AU" "AT" "BD" "BY" "BE" "BA" "BR" "BG" "CA" "CL" "CN" "CO" "HR" "CZ" "DK" "EC" "FI" "FR" "DE" "GR" "HK" "HU" "IS" "IN" "ID" "IR" "IE" "IL" "IT" "JP" "KZ" "LV" "LT" "LU" "MK" "MX" "AN" "NC" "NZ" "NO" "PH" "PL" "PT" "QA" "RO" "RU" "RS" "SG" "SK" "SI" "ZA" "KR" "ES" "SE" "CH" "TW" "TH" "TR" "UA" "GB" "US" "VN";do
+        mv /etc/pacman.d/mirrorlist /etc/mirrorlist.bak
+        color green "Generating mirror list , Please wait"
+        wget https://www.archlinux.org/mirrorlist/\?country=$COUNTRY -O /etc/pacman.d/mirrorlist.new
+        sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.new
+        rankmirrors -n 3 /etc/pacman.d/mirrorlist.new > /etc/pacman.d/mirrorlist
+        chmod +r /etc/pacman.d/mirrorlist
+    done
+
     pacstrap /mnt base base-devel --force
     genfstab -U -p /mnt > /mnt/etc/fstab
 }

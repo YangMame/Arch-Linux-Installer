@@ -63,7 +63,10 @@ install_grub(){
 install_bootctl(){
     if (mount | grep efivarfs > /dev/null 2>&1);then
         bootctl --path=esp install
-        bootctl --path=esp update
+        cp /usr/share/systemd/bootctl/loader.conf /boot/loader/
+	echo "timeout 4" >> /boot/loader/loader.conf
+	echo -e "title          Arch Linux\nlinux          /vmlinuz-linux\ninitrd         /initramfs-linux.img" > /boot/loader/entries/arch.conf
+
     else
         color yellow "Looks like your PC doesn't suppot UEFI or not in UEFI mode ENTER to use grub. Input q to quit"
         read TMP
