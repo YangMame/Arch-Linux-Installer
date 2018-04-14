@@ -123,7 +123,7 @@ install(){
     select COUNTRY in "AU" "AT" "BD" "BY" "BE" "BA" "BR" "BG" "CA" "CL" "CN" "CO" "HR" "CZ" "DK" "EC" "FI" "FR" "DE" "GR" "HK" "HU" "IS" "IN" "ID" "IR" "IE" "IL" "IT" "JP" "KZ" "LV" "LT" "LU" "MK" "MX" "AN" "NC" "NZ" "NO" "PH" "PL" "PT" "QA" "RO" "RU" "RS" "SG" "SK" "SI" "ZA" "KR" "ES" "SE" "CH" "TW" "TH" "TR" "UA" "GB" "US" "VN";do
         mv /etc/pacman.d/mirrorlist /etc/mirrorlist.bak
         color green "Generating mirror list , Please wait"
-        wget https://www.archlinux.org/mirrorlist/\?country=$COUNTRY\&protocol=http\&protocol=https -O /etc/pacman.d/mirrorlist.new
+        wget https://www.archlinux.org/mirrorlist/\?country=$COUNTRY\&protocol=https -O /etc/pacman.d/mirrorlist.new
         sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.new
         rankmirrors -n 3 /etc/pacman.d/mirrorlist.new > /etc/pacman.d/mirrorlist
         chmod +r /etc/pacman.d/mirrorlist
