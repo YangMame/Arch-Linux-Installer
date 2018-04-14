@@ -130,6 +130,12 @@ install(){
 	break
     done
 
+    select mirror in `sed -n '1p' /etc/pacman.d/mirrorlist` `sed -n '2p' /etc/pacman.d/mirrorlist` `sed -n '3p' /etc/pacman.d/mirrorlist`;do
+        color red "Please choose the mirror you want to use by input the num"
+        sed -n '$mirror p' -i /etc/pacman.d/mirrorlist
+    break
+    done
+
     pacstrap /mnt base base-devel --force
     genfstab -U -p /mnt > /mnt/etc/fstab
 }
