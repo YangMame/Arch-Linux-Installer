@@ -123,16 +123,16 @@ install(){
     select COUNTRY in "AU" "AT" "BD" "BY" "BE" "BA" "BR" "BG" "CA" "CL" "CN" "CO" "HR" "CZ" "DK" "EC" "FI" "FR" "DE" "GR" "HK" "HU" "IS" "IN" "ID" "IR" "IE" "IL" "IT" "JP" "KZ" "LV" "LT" "LU" "MK" "MX" "AN" "NC" "NZ" "NO" "PH" "PL" "PT" "QA" "RO" "RU" "RS" "SG" "SK" "SI" "ZA" "KR" "ES" "SE" "CH" "TW" "TH" "TR" "UA" "GB" "US" "VN";do
         mv /etc/pacman.d/mirrorlist /etc/mirrorlist.bak
         color green "Generating mirror list , Please wait"
-        wget https://www.archlinux.org/mirrorlist/\?country=$COUNTRY -O /etc/pacman.d/mirrorlist.new
+        wget https://www.archlinux.org/mirrorlist/\?country=$COUNTRY\&protocol=http\&protocol=https -O /etc/pacman.d/mirrorlist.new
         sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.new
         rankmirrors -n 3 /etc/pacman.d/mirrorlist.new > /etc/pacman.d/mirrorlist
         chmod +r /etc/pacman.d/mirrorlist
 	break
     done
 
-    select mirror in `sed -n '1p' /etc/pacman.d/mirrorlist` `sed -n '2p' /etc/pacman.d/mirrorlist` `sed -n '3p' /etc/pacman.d/mirrorlist`;do
-        color red "Please choose the mirror you want to use by input the num"
-        sed -n '$mirror p' -i /etc/pacman.d/mirrorlist
+    color red "Please choose the mirror you want to use by input the num"
+    select mirror in "`tail -n 1 /etc/pacman.d/mirrorlist`" "`tail -n 2 /etc/pacman.d/mirrorlist | head -n 1`" "`tail -n 3 /etc/pacman.d/mirrorlist | head -n 1`";do
+        echo $mirror > /etc/pacman.d/mirrorlist
     break
     done
 
