@@ -25,6 +25,10 @@ partition(){
     color green "Format it ? y)yes ENTER)no"
     read tmp
 
+    if [ "$other" == "/boot" ];then
+        boot=$OTHER
+    fi
+
     if [ "$tmp" == y ];then
         umount $OTHER > /dev/null 2>&1
         color green "Input the filesystem's num to format it"
@@ -124,6 +128,9 @@ install(){
         mv /etc/pacman.d/mirrorlist /etc/mirrorlist.bak
         color green "Generating mirror list , Please wait"
         wget https://www.archlinux.org/mirrorlist/\?country=$COUNTRY\&protocol=https -O /etc/pacman.d/mirrorlist.new
+        if (! grep -q https /etc/pacman.d/mirrorlist.new);then
+            wget https://www.archlinux.org/mirrorlist/\?country=$COUNTRY\&protocol=http -O /etc/pacman.d/mirrorlist.new
+        fi
         sed -i 's/#Server/Server/g' /etc/pacman.d/mirrorlist.new
         rankmirrors -n 3 /etc/pacman.d/mirrorlist.new > /etc/pacman.d/mirrorlist
         chmod +r /etc/pacman.d/mirrorlist
@@ -143,7 +150,7 @@ install(){
 config(){
     wget https://raw.githubusercontent.com/YangMame/Arch-Installer/master/config.sh -O /mnt/root/config.sh
     chmod +x /mnt/root/config.sh
-    arch-chroot /mnt /root/config.sh
+    arch-chroot /mnt /root/config.sh $boot
 }
 
 if [ "$1" != '' ];then
