@@ -68,7 +68,7 @@ install_bootctl(){
         bootctl --path=/boot install
         cp /usr/share/systemd/bootctl/loader.conf /boot/loader/
 	echo "timeout 4" >> /boot/loader/loader.conf
-	echo -e "title          Arch Linux\nlinux          /vmlinuz-linux\ninitrd         /initramfs-linux.img" > /boot/loader/entries/arch.conf
+	echo -e "title          Arch Linux\nlinux          ../vmlinuz-linux\ninitrd         ../initramfs-linux.img" > /boot/loader/entries/arch.conf
 
     else
         color yellow "Looks like your PC doesn't suppot UEFI or not in UEFI mode ENTER to use grub. Input q to quit"
@@ -82,7 +82,7 @@ install_bootctl(){
 }
 
 install_efistub(){
-    UUID=`blkid | grep $boot | sed 's/.* UUID="//g' | sed 's/".*//g'`
+    UUID=`blkid -s UUID -o value $boot`
     efi=`echo $boot | grep -o "[0-9]*"`
     if (mount | grep efivarfs > /dev/null 2>&1);then
         pacman -S --noconfirm efibootmgr
