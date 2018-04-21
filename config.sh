@@ -1,6 +1,7 @@
 #!/bin/bash
 
-boot=$1
+root=$1
+boot=$2
 
 set -e
 
@@ -82,7 +83,7 @@ install_bootctl(){
 }
 
 install_efistub(){
-    UUID=`blkid -s UUID -o value $boot`
+    UUID=`blkid -s UUID -o value $root`
     efi=`echo $boot | grep -o "[0-9]*"`
     if (mount | grep efivarfs > /dev/null 2>&1);then
         pacman -S --noconfirm efibootmgr
