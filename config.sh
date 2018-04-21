@@ -295,8 +295,10 @@ main(){
     config_locale
     color yellow "Use Bootctl EFISUB or GRUB ? b)Bootctl e)EFISTUB ENTER)GRUB"
     read TMP
-    if [ "$TMP" == "y" ];then
+    if [ "$TMP" == "b" ];then
         install_bootctl
+    elif [ "$TMP" == "e" ];then
+        install_efistub
     else
         install_grub
     fi
