@@ -12,7 +12,7 @@
 ### How To Use
 Boot into Arch Linux Live CD , Connect The Network And Run :
 ```
-wget git.io/vb9IK -O live.sh
+wget git.io/vh23k -O live.sh
 chmod +x live.sh
 ./live.sh
 ```
@@ -33,9 +33,10 @@ chmod +x live.sh
 #### 使用方法：
 进入live系统连接网络后执行：
 ```
-wget git.io/vb9IK -O live.sh
+wget git.io/vh23k -O live.sh
 chmod +x live.sh
 ./live.sh
 ```
 
 *注意查看带有颜色的提示*
+
