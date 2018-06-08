@@ -215,17 +215,17 @@ install_app(){
         done
         pacman -Sy
         pacman -S --noconfirm archlinuxcn-keyring
-        pacman -S --noconfirm yaourt
+        pacman -S --noconfirm aurman
     else
         pacman -S --noconfirm git
         su - $USER -c "cd ~
             git clone https://aur.archlinux.org/package-query.git
             cd package-query&&makepkg -si
             cd ..
-            git clone https://aur.archlinux.org/yaourt.git
-            cd yaourt&&makepkg -si
+            git clone https://aur.archlinux.org/aurman.git
+            cd aurman&&makepkg -si
             cd ..
-            rm -rf package-query yaourt"
+            rm -rf package-query aurman"
         fi
     pacman -S --noconfirm networkmanager xorg-server firefox wqy-zenhei
     systemctl enable NetworkManager
