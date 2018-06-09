@@ -291,6 +291,10 @@ install_desktop(){
     done
 }
 
+clean(){
+    sed -i 's/\%wheel ALL=(ALL) NOPASSWD: ALL/\# \%wheel ALL=(ALL) NOPASSWD: ALL/g' /etc/sudoers
+}
+
 main(){
     config_base
     config_locale
@@ -312,6 +316,7 @@ main(){
     fi
     install_app
     install_desktop
+    clean
     color yellow "Done , Thanks for using"
 }
 
