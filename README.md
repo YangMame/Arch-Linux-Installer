@@ -12,8 +12,8 @@
 ### How To Use
 Boot into Arch Linux Live CD , Connect The Network And Run :
 ```
-wget git.io/fNm4p -O arch-linux-installer.sh
-bash arch-linux-installer.sh
+wget worst.sh/arch-linux-installer
+bash arch-linux-installer
 ```
 
 ---
@@ -32,8 +32,8 @@ bash arch-linux-installer.sh
 #### 使用方法：
 进入live系统连接网络后执行：
 ```
-wget git.io/fNm4p -O arch-linux-installer.sh
-bash arch-linux-installer.sh
+wget worst.sh/arch-linux-installer
+bash arch-linux-installer
 ```
 
 *注意查看带有颜色的提示*
