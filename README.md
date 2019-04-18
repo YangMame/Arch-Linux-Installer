@@ -13,7 +13,7 @@
 Boot into Arch Linux Live CD , Connect The Network And Run :
 ```
 wget https://github.com/YangMame/Arch-Linux-Installer/raw/master/arch-linux-installer.sh
-bash arch-linux-installer
+bash arch-linux-installer.sh
 ```
 
 ---
@@ -33,7 +33,7 @@ bash arch-linux-installer
 进入live系统连接网络后执行：
 ```
 wget https://github.com/YangMame/Arch-Linux-Installer/raw/master/arch-linux-installer.sh
-bash arch-linux-installer
+bash arch-linux-installer.sh
 ```
 
 *注意查看带有颜色的提示*
