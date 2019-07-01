@@ -189,7 +189,7 @@ install_bluetooth(){
 }
 
 install_app(){
-    color yellow "Install aurman from archlinuxcn or use git ? (just for China users) y)YES ENTER)NO"
+    color yellow "Install yay(aur helper) from archlinuxcn or use git ? (just for China users) y)YES ENTER)NO"
     read TMP
     if [ "$TMP" == "y" ];then
         sed -i '/archlinuxcn/d' /etc/pacman.conf
@@ -215,17 +215,17 @@ install_app(){
         done
         pacman -Sy
         pacman -S --noconfirm archlinuxcn-keyring
-        pacman -S --noconfirm aurman
+        pacman -S --noconfirm yay
     else
         pacman -S --noconfirm git
         su - $USER -c "cd ~
             git clone https://aur.archlinux.org/package-query.git
-            cd package-query&&makepkg -si
+            cd package-query && makepkg -si
             cd ..
-            git clone https://aur.archlinux.org/aurman.git
-            cd aurman&&makepkg -si
+            git clone https://aur.archlinux.org/yay.git
+            cd yay && makepkg -si
             cd ..
-            rm -rf package-query aurman"
+            rm -rf package-query yay"
         fi
     pacman -S --noconfirm networkmanager xorg-server firefox wqy-zenhei
     systemctl enable NetworkManager
